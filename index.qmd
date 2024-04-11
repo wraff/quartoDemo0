@@ -1,0 +1,89 @@
+---
+title: 'FAIR bioinfo'
+author: 
+  - name: WR
+    email: wraff@igbmc.fr
+    orcid: 0000-0002-7426-3693
+    corresponding: true
+    affiliation:
+      - IGBMC
+abstract: |
+  The BiGEst platform is organising a regional session of the IFB training course FAIR principles in a bioinformatics project from 9 to 11 April 2024 at the URFIST in Strasbourg, in the Studium, room E.02 in the Entresol.This 3-day course is aimed at bioinformaticians and biostatisticians wishing to acquire theoretical and practical skills on the FAIR principles (Easy to Find, Accessible, Interoperable, Reusable) applied to an analysis and/or development project.
+format: html
+editor: visual
+---
+
+## Introduction
+
+*Ostreococcus tauri* is a unicellular green alga that serves as a valuable model organism for studying various aspects of eukaryotic cell biology, photosynthesis, and evolution. With its small genome size, rapid growth rate, and well-characterized physiological and genomic features, *O. tauri* offers a unique platform for investigating molecular mechanisms underlying biological processes.
+
+Differential gene expression analysis in *O. tauri* provides insights into how this microalga responds to environmental cues, developmental changes, and stress conditions. By comparing gene expression levels between different experimental conditions or time points, researchers can identify genes that are significantly upregulated or downregulated, offering clues about their potential roles in cellular processes.
+
+In this study, we performed differential expression analysis using high-throughput RNA sequencing (RNA-seq) data obtained from *O. tauri* under different growth conditions or treatments. By employing advanced bioinformatics tools such as DESeq2, we aimed to uncover key genes and pathways involved in the response of *O. tauri* to specific stimuli or perturbations.
+
+This analysis provides valuable insights into the transcriptional landscape of *O. tauri* and sheds light on the molecular mechanisms governing its physiological responses, thus contributing to our understanding of cellular adaptation and acclimation in this important model organism.
+
+## Data and methods
+
+### Data
+
+The RNA-seq data utilized in this study were obtained through a conventional analysis pipeline widely employed in transcriptomics research. Initially, the quality of raw sequencing data was assessed using FastQC to ensure high-quality reads. Subsequently, reads were aligned to the reference genome utilizing HISAT2, facilitating accurate mapping of transcripts. The resultant alignment files (SAM/BAM) were then processed and manipulated using Samtools, allowing for various downstream analyses. Finally, gene-level expression quantification was performed using Htseq count, enabling the enumeration of reads associated with each gene feature. This comprehensive pipeline ensured robust preprocessing and quantification of RNA-seq data, providing a reliable foundation for subsequent differential expression analysis using tools like DESeq2.
+
+### Deseq2
+
+DESeq2 is a powerful tool commonly used in RNA-seq data analysis to perform differential gene expression analysis. It employs sophisticated statistical methods to identify genes that are differentially expressed between different experimental conditions or sample groups. DESeq2 takes raw count data from RNA-seq experiments and applies normalization techniques to account for differences in sequencing depth and other sources of variation. It then fits a negative binomial model to the data, allowing for accurate estimation of variance and statistical testing for differential expression. By comparing expression levels across conditions, DESeq2 enables researchers to pinpoint genes that are significantly upregulated or downregulated, providing valuable insights into the underlying biological processes at play. Additionally, DESeq2 offers functionalities for data visualization and exploration, facilitating the interpretation of results and the generation of hypotheses for further investigation.
+
+## Results
+
+Differentially expressed genes are genes whose expression levels vary significantly between different sample groups or experimental conditions. In other words, these genes exhibit statistically significant differences in their transcriptional activity across compared conditions. In the context of RNA sequencing (RNA-seq) data analysis, identifying differentially expressed genes highlights variations in gene activity that may be associated with specific biological processes, responses to external stimuli, pathological states, developmental stages, or other experimental conditions. This information is valuable for understanding the underlying mechanisms of these phenomena and for identifying potential targets for further functional studies.
+
+### Get data
+
+```{r}
+data = read.table(file = "deseq2_demo.tsv",  header = TRUE, row.names = 1, sep="\t")
+data$Gene = rownames(data)
+head(data)
+```
+
+### Down regulated
+
+```{r}
+library(dplyr)
+library(DT)
+datatable(data %>% filter(log2FoldChange > 2, padj < 0.05))
+```
+
+### Up regulated
+
+```{r}
+data %>% filter(log2FoldChange > 2, padj < 0.05)
+```
+
+### Volcano plot
+
+```{r}
+library(ggplot2)
+library(plotly)
+
+pvalue_threshold <- 0.05
+
+p <- ggplot(data, aes(x = log2FoldChange, y = -log10(pvalue))) +
+  geom_point(color = ifelse(data$pvalue < pvalue_threshold, "red", "gray")) +
+  scale_color_manual(values = c("gray", "red")) +
+  geom_text(data = subset(data, pvalue < pvalue_threshold), aes(label = Gene), vjust = 1) +
+  labs(x = "Log2FoldChange", y = "-log10(p-value)") +
+  theme_minimal()
+
+ggplotly(p)
+```
+
+## Conclusion
+
+## Session
+
+```{r}
+library(sessioninfo)
+sessionInfo()
+
+
+```
