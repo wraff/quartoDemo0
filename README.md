@@ -1,5 +1,10 @@
 # Quarto test FAIR2024 Strasbourg
 
+
+
+[![DOI](https://zenodo.org/badge/785148493.svg)](https://zenodo.org/doi/10.5281/zenodo.10960752)
+
+
 ### Contribution
 
 If you use this please cite :
