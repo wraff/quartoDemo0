@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file. See
 [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.0](https://github.com/wraff/quartoDemo0/compare/v1.2.0...v1.3.0) (2024-04-11)
+
+
+### Features
+
+* update README.md ([e56bef8](https://github.com/wraff/quartoDemo0/commit/e56bef819339cb2a0c2600e39f30bb2873b5d35c))
+
 ## [1.2.0](https://github.com/wraff/quartoDemo0/compare/v1.1.0...v1.2.0) (2024-04-11)
 
 
